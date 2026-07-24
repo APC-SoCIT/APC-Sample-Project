@@ -19,6 +19,7 @@ System_Ext(payment_network, "Payment Network", "Handles inter-bank fund transfer
 ' AI Agent Systems (treated as external for context diagram)
 System_Ext(ai_fraud, "AI Fraud Detection Agent", "Analyzes user behavior and transactions in real-time to detect and prevent fraud.")
 System_Ext(ai_chatbot, "AI Chatbot Assistant", "Provides 24/7 customer support, answers queries, and guides users through processes.")
+System_Ext(ai_offers, "AI Personalized Offers Agent", "Analyzes customer behavior and financial data to provide personalized product recommendations.")
 
 ' The System in Scope
 System(internet_banking, "Internet Banking System", "Allows customers to manage their accounts, perform transactions, and access banking services online.")
@@ -35,6 +36,8 @@ Rel_D(admin, internet_banking, "Manages user accounts, reviews flagged transacti
 Rel_D(internet_banking, ai_fraud, "Sends transaction and user session data for risk analysis")
 Rel_D(ai_fraud, internet_banking, "Returns risk scores and fraud alerts")
 Rel_D(internet_banking, ai_chatbot, "Provides account context to assist the user")
+Rel_D(internet_banking, ai_offers, "Sends anonymized customer data and activity")
+Rel_D(ai_offers, internet_banking, "Returns personalized product and service recommendations")
 
 ' System to external system interactions
 Rel_D(internet_banking, core_banking, "Fetches account data and posts transactions")
