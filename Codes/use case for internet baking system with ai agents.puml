@@ -1,0 +1,62 @@
+@startuml
+' Style settings for a clean look
+skinparam actorStyle awesome
+skinparam usecase {
+    BackgroundColor #A9DCDF
+    BorderColor #1C6EA4
+}
+skinparam rectangle {
+    BorderColor #1C6EA4
+}
+left to right direction
+
+title Use Case Diagram for Internet Banking System with AI Agents
+
+' Define Actors
+actor "Bank Customer" as customer
+actor "Bank Staff" as staff
+
+' Define System Actors (AI Agents)
+actor "AI Fraud Detection Agent" as fraudAgent <<system>>
+actor "AI Chatbot Assistant" as chatbot <<system>>
+
+' System Boundary
+rectangle "Internet Banking System" {
+    ' Customer Use Cases
+    usecase "View Account Details" as UC1
+    usecase "Transfer Funds" as UC2
+    usecase "Pay Bills" as UC3
+    usecase "Get Help from Chatbot" as UC4
+    usecase "Manage Profile" as UC5
+
+    ' Staff Use Cases
+    usecase "Review Flagged Transactions" as UC6
+    usecase "Manage User Accounts" as UC7
+}
+
+' Actor to Use Case Relationships
+customer -- UC1
+customer -- UC2
+customer -- UC3
+customer -- UC4
+customer -- UC5
+
+staff -- UC6
+staff -- UC7
+
+' AI Agent Relationships
+' The AI Chatbot is the primary handler for the "Get Help" use case
+chatbot -- UC4
+
+' The AI Fraud Agent extends transactional use cases.
+' The ".>" arrow with <<extend>> means this is an optional extension point.
+(UC2) .> (Analyze Transaction) : <<extend>>
+(UC3) .> (Analyze Transaction) : <<extend>>
+
+' The Fraud Agent is the actor performing the analysis
+fraudAgent -- (Analyze Transaction)
+
+' The result of the analysis can trigger a review
+(Analyze Transaction) .> UC6 : <<include>>
+
+@enduml

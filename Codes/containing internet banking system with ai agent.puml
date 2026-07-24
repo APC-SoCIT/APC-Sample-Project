@@ -1,0 +1,66 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+' Layout and styling
+' LAYOUT_WITH_LEGEND()
+' LAYOUT_TOP_DOWN
+
+'--------------------------------
+' Actors and External Systems
+'--------------------------------
+
+Person(customer, "Bank Customer", "A customer using the banking platform.")
+Person(admin, "Bank Staff", "A bank employee for administration.")
+
+System_Ext(core_banking, "Core Banking System", "Manages accounts, balances, and ledgers.")
+System_Ext(email_sms, "Email/SMS Gateway", "Sends notifications and OTPs.")
+System_Ext(ai_fraud, "AI Fraud Detection Agent", "Analyzes transactions for fraud.")
+System_Ext(ai_chatbot, "AI Chatbot Assistant", "Provides 24/7 automated support.")
+
+'--------------------------------
+' System Boundary and Containers
+'--------------------------------
+
+System_Boundary(c1, "Internet Banking System") {
+
+    Container(spa, "Web Application", "JavaScript, React", "The customer-facing single-page application that runs in their browser. Provides all banking functionality.")
+    Container(mobile_app, "Mobile App", "Kotlin/Swift", "The native iOS/Android application for customers on the go.")
+
+    Container(api_gateway, "API Gateway", "Spring Cloud Gateway", "The single entry point for all client requests. Handles routing, authentication, and rate limiting.")
+
+    Container(api_app, "API Application", "Java, Spring Boot", "Handles core business logic, user management, account information, and transaction orchestration.")
+    
+    Container(ai_service, "AI Integration Service", "Python, FastAPI", "A dedicated service to prepare data and communicate with external AI agents for fraud detection and chat.")
+
+    ContainerDb(database, "Database", "PostgreSQL", "Stores user profiles, authentication info, session data, and recent transaction history for quick access.")
+}
+
+'--------------------------------
+' Relationships
+'--------------------------------
+
+' User to System relationships
+Rel_D(customer, spa, "Uses", "HTTPS")
+Rel_D(customer, mobile_app, "Uses")
+Rel_D(admin, spa, "Uses for administration", "HTTPS")
+
+' Client to API Gateway relationships
+Rel_D(spa, api_gateway, "Makes API calls", "JSON/HTTPS")
+Rel_D(mobile_app, api_gateway, "Makes API calls", "JSON/HTTPS")
+
+' API Gateway to Backend relationships
+Rel_D(api_gateway, api_app, "Forwards API calls to", "JSON/HTTPS")
+Rel_D(api_gateway, ai_service, "Forwards chat messages to", "JSON/HTTPS") ' For the chatbot
+
+' Internal service relationships
+Rel(api_app, database, "Reads from and writes to", "JDBC")
+Rel(api_app, ai_service, "Sends transaction/session data for analysis", "gRPC/Events")
+
+' Relationships to External Systems
+Rel(api_app, core_banking, "Fetches balances and posts transactions", "SOAP/XML")
+Rel(api_app, email_sms, "Sends notifications", "SMTP/HTTPS")
+
+Rel(ai_service, ai_fraud, "Sends data for risk scoring", "JSON/HTTPS")
+Rel(ai_service, ai_chatbot, "Proxies chat conversations", "JSON/HTTPS")
+
+@enduml

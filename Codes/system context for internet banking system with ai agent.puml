@@ -1,0 +1,44 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+
+' Layout direction
+'LAYOUT_TOP_DOWN
+' LAYOUT_WITH_LEGEND()
+
+title System Context Diagram for Internet Banking System with AI Agents
+
+' Actors
+Person(customer, "Bank Customer", "A customer of the bank who uses the internet banking portal.")
+Person(admin, "Bank Staff", "A bank employee responsible for system administration and fraud review.")
+
+' External Systems
+System_Ext(core_banking, "Core Banking System", "The bank's primary system for managing accounts, balances, and ledgers.")
+System_Ext(email_sms, "Email/SMS Gateway", "Sends notifications, alerts, and one-time passwords (OTPs).")
+System_Ext(payment_network, "Payment Network", "Handles inter-bank fund transfers (e.g., ACH, SWIFT).")
+
+' AI Agent Systems (treated as external for context diagram)
+System_Ext(ai_fraud, "AI Fraud Detection Agent", "Analyzes user behavior and transactions in real-time to detect and prevent fraud.")
+System_Ext(ai_chatbot, "AI Chatbot Assistant", "Provides 24/7 customer support, answers queries, and guides users through processes.")
+
+' The System in Scope
+System(internet_banking, "Internet Banking System", "Allows customers to manage their accounts, perform transactions, and access banking services online.")
+
+' Relationships
+' Customer interactions
+Rel_D(customer, internet_banking, "Views account details, performs transactions, pays bills, applies for loans")
+Rel_D(customer, ai_chatbot, "Asks for help, gets support, and receives guidance")
+
+' Admin interactions
+Rel_D(admin, internet_banking, "Manages user accounts, reviews flagged transactions, generates reports")
+
+' System to AI Agent interactions
+Rel_D(internet_banking, ai_fraud, "Sends transaction and user session data for risk analysis")
+Rel_D(ai_fraud, internet_banking, "Returns risk scores and fraud alerts")
+Rel_D(internet_banking, ai_chatbot, "Provides account context to assist the user")
+
+' System to external system interactions
+Rel_D(internet_banking, core_banking, "Fetches account data and posts transactions")
+Rel_D(internet_banking, email_sms, "Sends transaction alerts, OTPs, and notifications")
+Rel_D(internet_banking, payment_network, "Initiates external fund transfers")
+
+@enduml
