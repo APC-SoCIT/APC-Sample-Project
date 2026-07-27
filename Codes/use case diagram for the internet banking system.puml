@@ -1,0 +1,88 @@
+@startuml
+' Diagram Title
+title Internet Banking System Use Case Diagram
+
+' Style adjustments for better readability
+skinparam actorStyle awesome
+skinparam usecase {
+    BackgroundColor #LightGreen
+    BorderColor #DarkGreen
+}
+skinparam rectangle {
+    BorderColor #555
+    BackgroundColor #F0F0F0
+}
+skinparam arrow {
+    Color #333
+}
+
+' Define Actors
+actor "Customer" as customer
+actor "Bank Administrator" as admin
+
+' Define External System Actors
+actor "External Payment Gateway" as paymentGateway
+actor "Credit Bureau" as creditBureau
+
+' System Boundary
+rectangle "Internet Banking System" {
+    ' Customer Use Cases
+    usecase "Login" as UC1
+    usecase "View Account Summary" as UC2
+    usecase "View Transaction History" as UC3
+    usecase "Transfer Funds" as UC4
+    usecase "Pay Bills" as UC5
+    usecase "Manage Beneficiaries" as UC6
+    usecase "Apply for Loan" as UC7
+    usecase "Manage Profile" as UC8
+    usecase "Logout" as UC9
+
+    ' Administrator Use Cases
+    usecase "Manage Customer Accounts" as UC10
+    usecase "Generate Reports" as UC11
+
+    ' Included Use Cases (interactions with external systems)
+    usecase "Process Payment" as UC_Pay
+    usecase "Perform Credit Check" as UC_Credit
+}
+
+' --- Actor to Use Case Associations ---
+
+' Customer associations
+customer -- UC1
+customer -- UC2
+customer -- UC3
+customer -- UC4
+customer -- UC5
+customer -- UC6
+customer -- UC7
+customer -- UC8
+customer -- UC9
+
+' Bank Administrator associations
+admin -- UC10
+admin -- UC11
+
+' --- Use Case Relationships (include/extend) ---
+
+' Login is a prerequisite for most actions
+UC2 ..> UC1 : <<extend>>
+UC3 ..> UC1 : <<extend>>
+UC4 ..> UC1 : <<extend>>
+UC5 ..> UC1 : <<extend>>
+UC6 ..> UC1 : <<extend>>
+UC7 ..> UC1 : <<extend>>
+UC8 ..> UC1 : <<extend>>
+
+' Include relationships for external processing
+UC4 ..> UC_Pay : <<include>>
+UC5 ..> UC_Pay : <<include>>
+UC7 ..> UC_Credit : <<include>>
+
+' --- External System to Use Case Associations ---
+
+' These use cases are realized by external systems
+UC_Pay -- paymentGateway
+UC_Credit -- creditBureau
+
+@enduml
