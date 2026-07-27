@@ -21,6 +21,10 @@ actor "Customer" as customer
 actor "Bank Administrator" as admin
 
 ' Define External System Actors
+actor "Fraud Detection AI" as fraudAI
+actor "Financial Advisor AI" as advisorAI
+
+' Define External System Actors (already present, but grouped for clarity)
 actor "External Payment Gateway" as paymentGateway
 actor "Credit Bureau" as creditBureau
 
@@ -36,6 +40,7 @@ rectangle "Internet Banking System" {
     usecase "Apply for Loan" as UC7
     usecase "Manage Profile" as UC8
     usecase "Logout" as UC9
+    usecase "Get Financial Advice" as UC12
 
     ' Administrator Use Cases
     usecase "Manage Customer Accounts" as UC10
@@ -44,6 +49,7 @@ rectangle "Internet Banking System" {
     ' Included Use Cases (interactions with external systems)
     usecase "Process Payment" as UC_Pay
     usecase "Perform Credit Check" as UC_Credit
+    usecase "Analyze for Fraud" as UC_Fraud
 }
 
 ' --- Actor to Use Case Associations ---
@@ -58,10 +64,15 @@ customer -- UC6
 customer -- UC7
 customer -- UC8
 customer -- UC9
+customer -- UC12
 
 ' Bank Administrator associations
 admin -- UC10
 admin -- UC11
+
+' AI Agent associations
+fraudAI -- UC_Fraud
+advisorAI -- UC12
 
 ' --- Use Case Relationships (include/extend) ---
 
@@ -73,11 +84,14 @@ UC5 ..> UC1 : <<extend>>
 UC6 ..> UC1 : <<extend>>
 UC7 ..> UC1 : <<extend>>
 UC8 ..> UC1 : <<extend>>
+UC12 ..> UC1 : <<extend>>
 
 ' Include relationships for external processing
 UC4 ..> UC_Pay : <<include>>
 UC5 ..> UC_Pay : <<include>>
 UC7 ..> UC_Credit : <<include>>
+UC4 ..> UC_Fraud : <<include>>
+UC5 ..> UC_Fraud : <<include>>
 
 ' --- External System to Use Case Associations ---
 
