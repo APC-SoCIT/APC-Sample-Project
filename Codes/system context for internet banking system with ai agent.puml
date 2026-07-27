@@ -14,20 +14,19 @@ Person(admin, "Bank Staff", "A bank employee responsible for system administrati
 ' External Systems
 System_Ext(core_banking, "Core Banking System", "The bank's primary system for managing accounts, balances, and ledgers.")
 System_Ext(email_sms, "Email/SMS Gateway", "Sends notifications, alerts, and one-time passwords (OTPs).")
-System_Ext(payment_network, "Payment Network", "Handles inter-bank fund transfers (e.g., ACH, SWIFT).")
+System_Ext(payment_gateway, "External Payment Gateway", "Handles inter-bank fund transfers and bill payments.")
+System_Ext(credit_bureau, "Credit Bureau", "Provides credit scores and history for loan applicants.")
 
 ' AI Agent Systems (treated as external for context diagram)
 System_Ext(ai_fraud, "AI Fraud Detection Agent", "Analyzes user behavior and transactions in real-time to detect and prevent fraud.")
-System_Ext(ai_chatbot, "AI Chatbot Assistant", "Provides 24/7 customer support, answers queries, and guides users through processes.")
-System_Ext(ai_offers, "AI Personalized Offers Agent", "Analyzes customer behavior and financial data to provide personalized product recommendations.")
+System_Ext(ai_advisor, "Financial Advisor AI", "Provides personalized financial advice based on user data.")
 
 ' The System in Scope
 System(internet_banking, "Internet Banking System", "Allows customers to manage their accounts, perform transactions, and access banking services online.")
 
 ' Relationships
 ' Customer interactions
-Rel_D(customer, internet_banking, "Views account details, performs transactions, pays bills, applies for loans")
-Rel_D(customer, ai_chatbot, "Asks for help, gets support, and receives guidance")
+Rel_D(customer, internet_banking, "Views account details, performs transactions, pays bills, applies for loans, gets financial advice")
 
 ' Admin interactions
 Rel_D(admin, internet_banking, "Manages user accounts, reviews flagged transactions, generates reports")
@@ -35,13 +34,14 @@ Rel_D(admin, internet_banking, "Manages user accounts, reviews flagged transacti
 ' System to AI Agent interactions
 Rel_D(internet_banking, ai_fraud, "Sends transaction and user session data for risk analysis")
 Rel_D(ai_fraud, internet_banking, "Returns risk scores and fraud alerts")
-Rel_D(internet_banking, ai_chatbot, "Provides account context to assist the user")
-Rel_D(internet_banking, ai_offers, "Sends anonymized customer data and activity")
-Rel_D(ai_offers, internet_banking, "Returns personalized product and service recommendations")
+Rel_D(internet_banking, ai_advisor, "Sends anonymized financial data for analysis")
+Rel_D(ai_advisor, internet_banking, "Returns financial recommendations and insights")
 
 ' System to external system interactions
 Rel_D(internet_banking, core_banking, "Fetches account data and posts transactions")
 Rel_D(internet_banking, email_sms, "Sends transaction alerts, OTPs, and notifications")
-Rel_D(internet_banking, payment_network, "Initiates external fund transfers")
+Rel_D(internet_banking, payment_gateway, "Initiates external fund transfers and bill payments")
+Rel_D(internet_banking, credit_bureau, "Requests credit check for loan applications")
+Rel_D(credit_bureau, internet_banking, "Returns credit score and report")
 
 @enduml

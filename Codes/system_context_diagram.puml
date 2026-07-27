@@ -1,0 +1,57 @@
+@startuml
+' Diagram Title
+title System Context Diagram - Internet Banking System
+
+' Style adjustments
+skinparam actorStyle awesome
+skinparam rectangle {
+    BorderColor #000000
+    BackgroundColor #ADD8E6
+    StereotypeFontColor #000000
+}
+skinparam component {
+    BorderColor #555
+    BackgroundColor #F0F0F0
+}
+skinparam arrow {
+    Color #333
+    MessageAlignment center
+}
+
+' Define External Entities (Actors/Systems)
+actor "Customer" as customer
+actor "Bank Administrator" as admin
+component "Fraud Detection AI" as fraudAI
+component "Financial Advisor AI" as advisorAI
+component "External Payment Gateway" as paymentGateway
+component "Credit Bureau" as creditBureau
+
+' Define the System
+rectangle "Internet Banking System" as IBS
+
+' --- Data Flows ---
+
+' Customer Interactions
+customer --> IBS : Login Credentials, Requests (View, Transfer, Pay), Profile Updates, Loan Application
+IBS --> customer : Account Info, Transaction Status, Financial Advice, Alerts
+
+' Administrator Interactions
+admin --> IBS : Account Management Actions, Report Requests
+IBS --> admin : System Reports, Customer Data
+
+' AI Agent Interactions
+IBS --> fraudAI : Transaction Data for Analysis
+fraudAI --> IBS : Fraud Risk Score / Alerts
+
+IBS --> advisorAI : Anonymized Financial Data & Queries
+advisorAI --> IBS : Personalized Financial Recommendations
+
+' External System Interactions
+IBS --> paymentGateway : Payment Instructions
+paymentGateway --> IBS : Payment Confirmation
+
+IBS --> creditBureau : Credit Check Request
+creditBureau --> IBS : Credit Score & Report
+
+
+@enduml
